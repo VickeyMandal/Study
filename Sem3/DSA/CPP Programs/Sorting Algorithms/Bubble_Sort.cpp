@@ -16,6 +16,7 @@ void bubblesort(int arr[], int n){
 					arr[j]=arr[j+1];
 					arr[j+1]=temp;
 					count++;
+					swapped = true;
 				}
 						
 		}

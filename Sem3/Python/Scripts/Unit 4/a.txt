@@ -1,3 +1,3 @@
-#java
-python
-c
+java is fun
+python is fun
+cpp is fun
