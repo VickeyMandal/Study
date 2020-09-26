@@ -1,7 +1,12 @@
 o=open("a.txt","r")
-lc=0
+nl=0
+nw=0
+nc=0
 for line in o:
-	lc += 1
-	w=o.readline().split(" ")
-	# c=len(line.replace)
-print(w)
+	nl += 1
+	line=line.strip("\n")
+	words=line.split()
+	nw+=len(words)
+	nc+=len(line.replace(" ",""))
+o.close()
+print("line",nl,"words",nw,"char",nc)
