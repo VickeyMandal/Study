@@ -139,10 +139,12 @@ from tkinter import *
 
 
 
-root=Tk()
-s=Scrollbar(root)
-s.pack(side='RIGHT',fill=Y)
-m=Listbox(root,yscrollcommand=s.set)
-for line in range(70):
-	m.insert(END,"This is python"+str(line))
-m.pack(side=left)
+# root=Tk()
+# s=Scrollbar(root)
+# s.pack(side='RIGHT',fill=Y)
+# m=Listbox(root,yscrollcommand=s.set)
+# for line in range(70):
+# 	m.insert(END,"This is python"+str(line))
+# m.pack(side=left)
+
+

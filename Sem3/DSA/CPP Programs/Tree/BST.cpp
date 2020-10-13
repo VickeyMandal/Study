@@ -75,9 +75,10 @@ void insert(int item)
 }
 
 void preorder(node *r){
+	
 	if(r!=NULL)
 	{
-		cout<<r->info;
+		cout<<r->info<<" ";
 		preorder(r->left);
 		preorder(r->right);
 	}
@@ -87,25 +88,32 @@ void postorder(node *r){
 	{	
 		preorder(r->left);
 		preorder(r->right);
-		cout<<r->info;
+		cout<<r->info<<" ";
 	}
 }
 
 void inorder(node *r){
+	cout<<"Inorder : ";
 	if(r!=NULL)
 	{	
 		preorder(r->left);
-		cout<<r->info;
+		cout<<r->info<<" ";
 		preorder(r->right);
 		
 	}
 }
 
 int main(){
-	insert(2);
 	insert(7);
-	insert(3);
+	insert(5);
 	insert(1);
+	insert(8);
+	insert(3);
+	insert(6);
+	insert(0);
+	insert(9);
+	insert(4);
+	insert(2);
 	preorder(root);
 	cout<<"\n";
 	postorder(root);
