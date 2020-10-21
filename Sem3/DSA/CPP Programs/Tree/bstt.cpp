@@ -1,112 +1,289 @@
+
+
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 
-struct node {
-  int key;
-  struct node *left, *right;
+class BinarySearchTree
+{
+    private:
+        struct tree_node
+        {
+           tree_node* left;
+           tree_node* right;
+           int data;
+        };
+        tree_node* root;
+    public:
+        BinarySearchTree()
+        {
+           root = NULL;
+        }
+        bool isEmpty() const { return root==NULL; }
+        void print_inorder();
+        void inorder(tree_node*);
+        void print_preorder();
+        void preorder(tree_node*);
+        void print_postorder();
+        void postorder(tree_node*);
+        void insert(int);
+        void remove(int);
 };
 
-// Create a node
-struct node *newNode(int item) {
-  struct node *temp = (struct node *)malloc(sizeof(struct node));
-  temp->key = item;
-  temp->left = temp->right = NULL;
-  return temp;
-}
-
-// Inorder Traversal
-void inorder(struct node *root) {
-  if (root != NULL) {
-    // Traverse left
-    inorder(root->left);
-
-    // Traverse root
-    cout << root->key << " -> ";
-
-    // Traverse right
-    inorder(root->right);
-  }
-}
-
-// Insert a node
-struct node *insert(struct node *node, int key) {
-  // Return a new node if the tree is empty
-  if (node == NULL) return newNode(key);
-
-  // Traverse to the right place and insert the node
-  if (key < node->key)
-    node->left = insert(node->left, key);
+// Smaller elements go left
+// larger elements go right
+void BinarySearchTree::insert(int d)
+{
+    tree_node* t = new tree_node;
+    tree_node* parent;
+    t->data = d;
+    t->left = NULL;
+    t->right = NULL;
+    parent = NULL;
+  // is this a new tree?
+  if(isEmpty()) root = t;
   else
-    node->right = insert(node->right, key);
-
-  return node;
-}
-
-// Find the inorder successor
-struct node *minValueNode(struct node *node) {
-  struct node *current = node;
-
-  // Find the leftmost leaf
-  while (current && current->left != NULL)
-    current = current->left;
-
-  return current;
-}
-
-// Deleting a node
-struct node *deleteNode(struct node *root, int key) {
-  // Return if the tree is empty
-  if (root == NULL) return root;
-
-  // Find the node to be deleted
-  if (key < root->key)
-    root->left = deleteNode(root->left, key);
-  else if (key > root->key)
-    root->right = deleteNode(root->right, key);
-  else {
-    // If the node is with only one child or no child
-    if (root->left == NULL) {
-      struct node *temp = root->right;
-      free(root);
-      return temp;
-    } else if (root->right == NULL) {
-      struct node *temp = root->left;
-      free(root);
-      return temp;
+  {
+    //Note: ALL insertions are as leaf nodes
+    tree_node* curr;
+    curr = root;
+    // Find the Node's parent
+    while(curr)
+    {
+        parent = curr;
+        if(t->data > curr->data) curr = curr->right;
+        else curr = curr->left;
     }
 
-    // If the node has two children
-    struct node *temp = minValueNode(root->right);
-
-    // Place the inorder successor in position of the node to be deleted
-    root->key = temp->key;
-
-    // Delete the inorder successor
-    root->right = deleteNode(root->right, temp->key);
+    if(t->data < parent->data)
+       parent->left = t;
+    else
+       parent->right = t;
   }
-  return root;
 }
 
-// Driver code
-int main() {
-  struct node *root = NULL;
-  root = insert(root, 7);
-  root = insert(root, 5);
-  root = insert(root, 1);
-  root = insert(root, 8);
-  root = insert(root, 3);
-  root = insert(root, 6);
-  root = insert(root, 0);
-  root = insert(root, 9);
-  root = insert(root, 4);
-  root = insert(root, 2);
+void BinarySearchTree::remove(int d)
+{
+    //Locate the element
+    bool found = false;
+    if(isEmpty())
+    {
+        cout<<" This Tree is empty! "<<endl;
+        return;
+    }
+    tree_node* curr;
+    tree_node* parent;
+    curr = root;
+    while(curr != NULL)
+    {
+         if(curr->data == d)
+         {
+            found = true;
+            break;
+         }
+         else
+         {
+             parent = curr;
+             if(d>curr->data) curr = curr->right;
+             else curr = curr->left;
+         }
+    }
+    if(!found)
+		 {
+        cout<<" Data not found! "<<endl;
+        return;
+    }
 
-  cout << "Inorder traversal: ";
-  inorder(root);
 
-//  cout << "\nAfter deleting 10\n";
-//  root = deleteNode(root, 10);
-  cout << "Inorder traversal: ";
+		 // 3 cases :
+    // 1. We're removing a leaf node
+    // 2. We're removing a node with a single child
+    // 3. we're removing a node with 2 children
+
+    // Node with single child
+    if((curr->left == NULL && curr->right != NULL)|| (curr->left != NULL
+&& curr->right == NULL))
+    {
+       if(curr->left == NULL && curr->right != NULL)
+       {
+           if(parent->left == curr)
+           {
+             parent->left = curr->right;
+             delete curr;
+           }
+           else
+           {
+             parent->right = curr->right;
+             delete curr;
+           }
+       }
+       else // left child present, no right child
+       {
+          if(parent->left == curr)
+           {
+             parent->left = curr->left;
+             delete curr;
+           }
+           else
+           {
+             parent->right = curr->left;
+             delete curr;
+           }
+       }
+     return;
+    }
+
+		 //We're looking at a leaf node
+		 if( curr->left == NULL && curr->right == NULL)
+    {
+        if(parent->left == curr) parent->left = NULL;
+        else parent->right = NULL;
+		 		 delete curr;
+		 		 return;
+    }
+
+
+    //Node with 2 children
+    // replace node with smallest value in right subtree
+    if (curr->left != NULL && curr->right != NULL)
+    {
+        tree_node* chkr;
+        chkr = curr->right;
+        if((chkr->left == NULL) && (chkr->right == NULL))
+        {
+            curr = chkr;
+            delete chkr;
+            curr->right = NULL;
+        }
+        else // right child has children
+        {
+            //if the node's right child has a left child
+            // Move all the way down left to locate smallest element
+
+            if((curr->right)->left != NULL)
+            {
+                tree_node* lcurr;
+                tree_node* lcurrp;
+                lcurrp = curr->right;
+                lcurr = (curr->right)->left;
+                while(lcurr->left != NULL)
+                {
+                   lcurrp = lcurr;
+                   lcurr = lcurr->left;
+                }
+		 		curr->data = lcurr->data;
+                delete lcurr;
+                lcurrp->left = NULL;
+           }
+           else
+           {
+               tree_node* tmp;
+               tmp = curr->right;
+               curr->data = tmp->data;
+		 		 		    curr->right = tmp->right;
+               delete tmp;
+           }
+
+        }
+		 return;
+    }
+
+}
+
+void BinarySearchTree::print_inorder()
+{
   inorder(root);
+}
+
+void BinarySearchTree::inorder(tree_node* p)
+{
+    if(p != NULL)
+    {
+        if(p->left) inorder(p->left);
+        cout<<" "<<p->data<<" ";
+        if(p->right) inorder(p->right);
+    }
+    else return;
+}
+
+void BinarySearchTree::print_preorder()
+{
+  preorder(root);
+}
+
+void BinarySearchTree::preorder(tree_node* p)
+{
+    if(p != NULL)
+    {
+        cout<<" "<<p->data<<" ";
+        if(p->left) preorder(p->left);
+        if(p->right) preorder(p->right);
+    }
+    else return;
+}
+
+void BinarySearchTree::print_postorder()
+{
+  postorder(root);
+}
+
+void BinarySearchTree::postorder(tree_node* p)
+{
+    if(p != NULL)
+    {
+        if(p->left) postorder(p->left);
+        if(p->right) postorder(p->right);
+        cout<<" "<<p->data<<" ";
+    }
+    else return;
+}
+
+int main()
+{
+    BinarySearchTree b;
+    int ch,tmp,tmp1;
+    while(1)
+    {
+       cout<<endl<<endl;
+       cout<<" Binary Search Tree Operations "<<endl;
+       cout<<" ----------------------------- "<<endl;
+       cout<<" 1. Insertion/Creation "<<endl;
+       cout<<" 2. In-Order Traversal "<<endl;
+       cout<<" 3. Pre-Order Traversal "<<endl;
+       cout<<" 4. Post-Order Traversal "<<endl;
+       cout<<" 5. Removal "<<endl;
+       cout<<" 6. Exit "<<endl;
+       cout<<" Enter your choice : ";
+       cin>>ch;
+       switch(ch)
+       {
+           case 1 : cout<<" Enter Number to be inserted : ";
+                    cin>>tmp;
+                    b.insert(tmp);
+                    break;
+           case 2 : cout<<endl;
+                    cout<<" In-Order Traversal "<<endl;
+                    cout<<" -------------------"<<endl;
+                    b.print_inorder();
+                    break;
+           case 3 : cout<<endl;
+                    cout<<" Pre-Order Traversal "<<endl;
+                    cout<<" -------------------"<<endl;
+                    b.print_preorder();
+                    break;
+           case 4 : cout<<endl;
+                    cout<<" Post-Order Traversal "<<endl;
+                    cout<<" --------------------"<<endl;
+                    b.print_postorder();
+                    break;
+           case 5 : cout<<" Enter data to be deleted : ";
+                    cin>>tmp1;
+                    b.remove(tmp1);
+                    break;
+           case 6 : system("pause");
+                    return 0;
+                    break;
+       }
+    }
 }
 
