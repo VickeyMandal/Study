@@ -22,5 +22,5 @@ class c(a,b):
 	def feature6(self):
 		print("feature 6 is working")	
 
-c1 = c()
-
+c1 = b()
+c1.feature3()

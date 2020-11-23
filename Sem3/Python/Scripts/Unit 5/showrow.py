@@ -4,7 +4,6 @@
 		cursor.connection.cursor()
 		cursor.execyte(s)
 		records=cursor.fetchall()
-		print("Total rows in table: ",cursor.rowcount)
 		print("each info")
 		for row in records:
 			print("id = ",row[0])
