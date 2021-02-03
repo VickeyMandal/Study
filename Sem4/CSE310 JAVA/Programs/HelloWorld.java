@@ -1,13 +1,13 @@
+import java.util.Scanner;
+
 class HelloWorld {
 
     public static void main(String[] rk) {
-        byte b = 30; 	System.out.println(~b);
+       double s;
+       Scanner sc = new Scanner(System.in);
 
-//        byte b = -53; 	System.out.println(~b);
-//
-//        System.out.println(34>>3);
-//
-//        System.out.println(-34>>3);
+       s = sc.nextInt();
+        System.out.println(s);
 
     }
 }
