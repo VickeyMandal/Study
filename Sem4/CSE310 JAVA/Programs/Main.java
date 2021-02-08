@@ -1,30 +1,25 @@
 import java.util.Scanner;
-class Main
-{
-    public static void main(String[] args) {//calling method
-        int[] a; //declaration
-        a=new int[10];
 
+class Main {
+    int[] convert(double b[]) {
+        int c[]=new int[b.length];
+        for (int i = 0; i < b.length; i++) {
+            c[i]=(int)b[i];
+        }
+        return c;
+    }
+    public static void main(String[] args) {//double array to int
         Scanner sc=new Scanner(System.in);
-        System.out.println("Enter 10 numbers");
+        double a[]=new double[10];
+        System.out.println("Enter 10 double values");
         for(int i=0;i<10;i++)
         {
-            a[i] =sc.nextInt();
+            a[i]=sc.nextDouble();
         }
-//String s= Arrays.toString(a);
-//System.out.println(s);
-        boolean flag=false;
-        for(int i=0;i<10;i++)
-        {
-            if(a[i]==46){
-                flag=true;
-            }
-        }
-        if (flag==true){
-            System.out.println("Found");
-        } else {
-            System.out.println("Not found");
+        Main d=new Main();
+        int[] r=d.convert(a);
+        for (int i = 0; i < r.length; i++) {
+            System.out.println(r[i]);
         }
     }
-
 }
