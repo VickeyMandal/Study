@@ -1,10 +1,14 @@
-class a{}
-class Parent extends a{
 
-            public static void main(String[] rk) {
 
-                a obj = new Parent();
-                System.out.println(a instanceof Parent);
-            }
+class Parent{
+
+    public static void main(String args[])
+    {
+        for(int i=0; i<5; i++) {
+            System.out.println(i++);
         }
+    }
+
+
+}
 

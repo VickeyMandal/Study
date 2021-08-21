@@ -3,10 +3,10 @@ import java.util.Scanner;
 class HelloWorld {
 
     public static void main(String[] rk) {
-       double s;
-       Scanner sc = new Scanner(System.in);
+       String s;
+       //Scanner sc = new Scanner(System.in);
 
-       s = sc.nextInt();
+       s = "Hello";
         System.out.println(s);
 
     }
